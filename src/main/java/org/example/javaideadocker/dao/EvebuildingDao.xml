@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.javaideadocker.dao.EvebuildingDao">
+
+    <!-- 企业查询-字段映射 -->
+    <resultMap id="getListEvebuildingspla" type="org.example.javaideadocker.pojo.Evebuilding">
+        <result property="siteBuilding" column="name_force"/>
+    </resultMap>
+    <select id="getListEvebuildingsplas" resultMap="getListEvebuildingspla">
+        select a.id_building,a.name_building,a.autograph_building,b.name_force from evebuilding a inner join eveforce b where a.site_building=b.id_force;
+    </select>
+
+    <!-- 势力查询-字段映射 -->
+    <resultMap id="getListEveforce" type="org.example.javaideadocker.pojo.Eveforce">
+        <result property="typeForce" column="name_nation"/>
+    </resultMap>
+    <select id="getListEveforce" resultMap="getListEveforce">
+        select a.id_force,a.name_force,a.autograph_force,b.name_nation from eveforce a inner join evenation b where a.type_force=b.id_nation;
+    </select>
+
+    <!-- 学生查询-字段映射 -->
+    <resultMap id="getListEvestudent" type="org.example.javaideadocker.pojo.Evestudent">
+        <result property="state1" column="name_nation"/>
+        <result property="state2" column="name_force"/>
+    </resultMap>
+    <select id="getListEvestudent" resultMap="getListEvestudent">
+        select a.id,a.names,a.number,a.levels,a.time,b.name_nation,c.name_force from  evestudent a inner join evenation b inner join eveforce c where a.state1=b.id_nation and a.state2=c.id_force;
+    </select>
+
+    <!-- 学生查询-字段映射-分页 -->
+    <resultMap id="getListEvestudentpla" type="org.example.javaideadocker.pojo.Evestudent">
+        <result property="state1" column="name_nation"/>
+        <result property="state2" column="name_force"/>
+    </resultMap>
+    <select id="getListEvestudentplas" resultMap="getListEvestudentpla">
+        select a.id,a.names,a.number,a.levels,a.time,b.name_nation,c.name_force from  evestudent a inner join evenation b inner join eveforce c where a.state1=b.id_nation and a.state2=c.id_force limit #{index},10;
+    </select>
+
+    <!-- 学生查询-分页-总条数 -->
+    <select id="getListEvestudentplaspage" resultType="java.lang.Integer">
+        select count(id) from evestudent;
+    </select>
+
+    <!-- 学生查询-分页-条件-动态sql -->
+    <resultMap id="getListEvestudentplaswher" type="org.example.javaideadocker.pojo.Evestudent">
+        <result property="state1" column="name_nation"/>
+        <result property="state2" column="name_force"/>
+    </resultMap>
+    <select id="getListEvestudentplaswhere" resultMap="getListEvestudentplaswher">
+        select a.id,a.names,a.number,a.levels,a.time,b.name_nation,c.name_force from  evestudent a inner join evenation b inner join eveforce c
+        <trim prefix="where" prefixOverrides="and">
+            a.state1=b.id_nation and a.state2=c.id_force
+            <if test="names!=null and names!=''">
+                and a.names=#{names}
+            </if>
+            <if test="number!=null and number!=''">
+                and a.number=#{number}
+            </if>
+            <if test="state2!=null and state2!=''">
+                and a.state2=#{state2}
+            </if>
+            <if test="levels!=null and levels!=''">
+                and a.levels=#{levels}
+            </if>
+        </trim>
+        limit #{index},10;
+    </select>
+
+    <!-- 学生查询-分页-条件-动态sql-总条数 -->
+    <select id="getListEvestudentplaspagewhere" resultType="java.lang.Integer">
+        select count(id)from  evestudent a inner join evenation b inner join eveforce c
+        <trim prefix="where" prefixOverrides="and">
+            a.state1=b.id_nation and a.state2=c.id_force
+            <if test="names!=null and names!=''">
+                and a.names=#{names}
+            </if>
+            <if test="number!=null and number!=''">
+                and a.number=#{number}
+            </if>
+            <if test="state2!=null and state2!=''">
+                and a.state2=#{state2}
+            </if>
+            <if test="levels!=null and levels!=''">
+                and a.levels=#{levels}
+            </if>
+        </trim>
+    </select>
+
+    <!-- 学生-添加 -->
+    <insert id="setaddEvestudent">
+        insert into evestudent(names, number,state1, state2) values (#{names},#{number},#{state1},#{state2});
+    </insert>
+
+    <!-- 学生-修改 -->
+    <update id="setupdateEvestudent">
+         update evestudent set names=#{names},number=#{number},levels=#{levels},state1=#{state1},state2=#{state2} where id=#{index};
+    </update>
+
+    <!-- 学生-删除 -->
+    <delete id="setdeleteEvestudent">
+        delete from evestudent where id=#{index};
+    </delete>
+
+</mapper>
